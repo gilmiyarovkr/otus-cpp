@@ -4,5 +4,5 @@
 
 TEST(VersionTest, CheckPatchVersion) {
     // Пример проверки, замените на вашу реальную логику
-    EXPECT_GT(PROJECT_VERSION_PATCH, 0); 
+    EXPECT_GT(version(), 0); 
 }
