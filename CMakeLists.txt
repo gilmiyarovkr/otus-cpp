@@ -66,7 +66,8 @@ if(WITH_GOOGLE_TEST)
     include(FetchContent)
     FetchContent_Declare(
       googletest
-      URL https://github.com/google/googletest.git
+      # URL !!! тут должна быть сслыка на архив
+      GIT_REPOSITORY https://github.com/google/googletest.git
       GIT_TAG v1.16.0 # последняя версия которая поддерживает С++14
     )
     # Исключение тестов самого GoogleTest
