@@ -67,6 +67,7 @@ if(WITH_GOOGLE_TEST)
     FetchContent_Declare(
       googletest
       URL https://github.com
+      GIT_TAG v1.16.0 # последняя версия которая поддерживает С++14
     )
     # Исключение тестов самого GoogleTest
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
