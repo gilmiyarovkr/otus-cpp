@@ -4,20 +4,35 @@ on:
   push:
     branches:
       - master
-      - feature/github_actions
+      - hw1
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # Клонирование
       - uses: actions/checkout@v2
         with:
           submodules: true
-      - run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
-      - run: cmake . -DPATCH_VERSION=${{ github.run_number }} -DWITH_BOOST_TEST=ON
-      - run: cmake --build .
-      - run: cmake --build . --target test
-      - run: cmake --build . --target package
+      # Установка зависимостей
+      - name: install dependencies
+        run: |
+          sudo apt-get update 
+          sudo apt-get install libboost-test-dev -y
+      # Конфигурация проекта
+      - name: configure cmake
+        run: |
+          cmake -B build \
+            -DPATCH_VERSION=${{ github.run_number }} \
+            -DWITH_BOOST_TEST=ON \
+            -DWITH_GOOGLE_TEST=OFF
+      # Сборка проекта 
+      - name: build project
+        run: |
+          cmake --build build --parallel
+          cmake --build build --target test
+          cmake --build build --target package
+      # Создание релиза
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -28,6 +43,7 @@ jobs:
           release_name: Release ${{ github.run_number }}
           draft: false
           prerelease: false
+      # Загрузка релиза
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
