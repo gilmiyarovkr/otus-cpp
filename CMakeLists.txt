@@ -66,7 +66,7 @@ if(WITH_GOOGLE_TEST)
     include(FetchContent)
     FetchContent_Declare(
       googletest
-      URL https://github.com
+      URL https://github.com/google/googletest.git
       GIT_TAG v1.16.0 # последняя версия которая поддерживает С++14
     )
     # Исключение тестов самого GoogleTest
