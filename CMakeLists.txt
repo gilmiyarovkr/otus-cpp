@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 
 # Формирование версии проекта
-set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
+set(PATCH_VERSION "1" CACHE STRING "Patch version")
 set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 
 project(helloworld VERSION ${PROJECT_VERSION})
@@ -51,13 +51,13 @@ target_link_libraries(helloworld PRIVATE compiler_flags)
 if(WITH_BOOST_TEST)
     find_package(Boost COMPONENTS unit_test_framework REQUIRED)
     
-    add_executable(test_version test_version.cpp)
+    add_executable(test_version btest_version.cpp)
 
     target_link_libraries(test_version 
         PRIVATE Boost::unit_test_framework helloworld compiler_flags
     )
 
-    add_test(NAME test_version COMMAND test_version)
+    add_test(NAME test_version COMMAND test_version --log_level=all)
 endif()
 
 #----------------------------------------------------------------------------
@@ -72,14 +72,15 @@ if(WITH_GOOGLE_TEST)
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(googletest)
 
-    add_executable(test_gtest test_version_gtest.cpp)
+    include(GoogleTest)
+    add_executable(test_gtest gtest_version.cpp)
 
     # Линкуемся с GTest::gtest_main (автоматически добавляет функцию main())
     target_link_libraries(test_gtest 
         PRIVATE GTest::gtest_main helloworld compiler_flags
     )
     
-    add_test(NAME test_gtest COMMAND test_gtest)
+    gtest_discover_tests(test_gtest)
 endif()
 
 #----------------------------------------------------------------------------
